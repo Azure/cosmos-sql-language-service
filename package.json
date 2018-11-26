@@ -1,0 +1,30 @@
+{
+    "author": "Microsoft Corporation",
+    "name": "@azure/cosmos-language-service",
+    "version": "0.0.1",
+    "description": "Cosmos DB SQL Language Service for the Monaco editor",
+    "dependencies": {
+        "antlr4": "4.7.1",
+        "monaco-editor": "0.14.3",
+        "q": "1.5.1",
+        "react": "16.5.2"
+    },
+    "devDependencies": {
+        "@types/react": "16.4.6",
+        "ts-loader": "5.1.1",
+        "ts-node": "7.0.0",
+        "typescript": "3.0.3"
+    },
+    "scripts": {
+        "dev": "tsc"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Azure/cosmos-sql-language-service"
+    },
+    "keywords": [
+        "Cosmos DB",
+        "Data",
+        "Language Service"
+    ]
+}
