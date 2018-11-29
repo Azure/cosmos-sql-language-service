@@ -1,10 +1,10 @@
 import {LanguageServiceFacade, ParseReason} from "../facade/LanguageServiceFacade";
-import {editor, Position, CancellationToken} from "monaco-editor";
+import {editor, Position, CancellationToken, languages} from "monaco-editor";
 
 export class SqlCompletionItemProvider {
     public triggerCharacters: string[] = [" ","."];
     
-    provideCompletionItems(model: editor.IReadOnlyModel, position: Position, token: CancellationToken) {      
+    provideCompletionItems(model: editor.IReadOnlyModel, position: Position, context: languages.CompletionContext, token: CancellationToken) {      
         const range = {
             startLineNumber: 1,
             startColumn: 1,

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Q = require("q");
-var monaco = require("monaco-editor");
+var monaco_editor_1 = require("monaco-editor");
 var ParseReason;
 (function (ParseReason) {
     ParseReason[ParseReason["GetCompletionWords"] = 1] = "GetCompletionWords";
@@ -13,7 +13,7 @@ var LanguageServiceFacade = /** @class */ (function () {
     LanguageServiceFacade.GetLanguageServiceParseResult = function (str, parseReason) {
         var timeExceeded = Q.Promise(function (resolve, reject) {
             var wait = setTimeout(function () {
-                var words = [];
+                var words = {};
                 resolve(words);
             }, LanguageServiceFacade.timeout);
         });
@@ -30,8 +30,8 @@ var LanguageServiceFacade = /** @class */ (function () {
             if (LanguageServiceFacade.workingWorker != null) {
                 LanguageServiceFacade.workingWorker.terminate();
             }
-            var currentUrlWithoutQueryParamsAndHashRoute = "http://" + window.location.host + window.location.pathname;
-            var url = currentUrlWithoutQueryParamsAndHashRoute.replace(/\/[^\/]*$/, '/node_modules/cosmosdb-language-service/dist/worker/dist/LanguageServiceWorker.js');
+            var currentUrlWithoutQueryParamsAndHashRoute = window.location.protocol + "//" + window.location.host + window.location.pathname;
+            var url = currentUrlWithoutQueryParamsAndHashRoute.replace(/\/[^\/]*$/, '/node_modules/@azure/cosmos-language-service/dist/worker/dist/LanguageServiceWorker.js');
             LanguageServiceFacade.workingWorker = new Worker(url);
             LanguageServiceFacade.workingWorker.onmessage = function (ev) {
                 var processedResults = [];
@@ -41,7 +41,7 @@ var LanguageServiceFacade = /** @class */ (function () {
                         if (!!label) {
                             processedResults.push({
                                 label: label,
-                                kind: monaco.languages.CompletionItemKind.Keyword
+                                kind: monaco_editor_1.languages.CompletionItemKind.Keyword
                             });
                         }
                     });
@@ -49,7 +49,7 @@ var LanguageServiceFacade = /** @class */ (function () {
                 else if (parseReason === ParseReason.GetErrors) {
                     results.forEach(function (err) {
                         var mark = {
-                            severity: monaco.MarkerSeverity.Error,
+                            severity: monaco_editor_1.MarkerSeverity.Error,
                             message: err.Message,
                             startLineNumber: err.line,
                             startColumn: err.column,
@@ -59,7 +59,8 @@ var LanguageServiceFacade = /** @class */ (function () {
                         processedResults.push(mark);
                     });
                 }
-                resolve(processedResults);
+                var completionItemList = { suggestions: processedResults };
+                resolve(completionItemList);
             };
             var source = {
                 code: str,

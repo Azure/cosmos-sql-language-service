@@ -11,10 +11,10 @@ export class LanguageServiceFacade {
 
     private static workingWorker : Worker = null; 
 
-    public static GetLanguageServiceParseResult(str : string, parseReason : ParseReason) : Q.Promise<any[]> {  
-        const timeExceeded = Q.Promise<any[]>((resolve : any, reject : any) => {
+    public static GetLanguageServiceParseResult(str : string, parseReason : ParseReason) : Q.Promise<any> {  
+        const timeExceeded = Q.Promise<any>((resolve : any, reject : any) => {
             const wait = setTimeout(() => {
-                const words : any = [];
+                const words : any = {};
                 resolve(words);
             }, LanguageServiceFacade.timeout);
         });
@@ -26,7 +26,7 @@ export class LanguageServiceFacade {
         });
     }
 
-    private static GetParseResult = (str : string, parseReason : ParseReason) : Q.Promise<any[]> => {
+    private static GetParseResult = (str : string, parseReason : ParseReason) : Q.Promise<any> => {
         return Q.Promise((resolve : any) => {
 
             if (LanguageServiceFacade.workingWorker != null) {
@@ -34,7 +34,7 @@ export class LanguageServiceFacade {
             }
 
             const currentUrlWithoutQueryParamsAndHashRoute: string = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
-            let url = currentUrlWithoutQueryParamsAndHashRoute.replace(/\/[^\/]*$/, '/node_modules/cosmosdb-language-service/dist/worker/dist/LanguageServiceWorker.js');
+            let url = currentUrlWithoutQueryParamsAndHashRoute.replace(/\/[^\/]*$/, '/node_modules/@azure/cosmos-language-service/dist/worker/dist/LanguageServiceWorker.js');
             LanguageServiceFacade.workingWorker = new Worker(url);  
 
             LanguageServiceFacade.workingWorker.onmessage = (ev : MessageEvent) => {  
@@ -66,7 +66,8 @@ export class LanguageServiceFacade {
                     }); 
                 }
 
-                resolve(processedResults);          
+                let completionItemList : languages.CompletionList = {suggestions : processedResults};
+                resolve(completionItemList);          
             } 
 
             const source = {

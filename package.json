@@ -5,7 +5,7 @@
     "description": "Cosmos DB SQL Language Service for the Monaco editor",
     "dependencies": {
         "antlr4": "4.7.1",
-        "monaco-editor": "0.14.3",
+        "monaco-editor": "0.15.6",
         "q": "1.5.1",
         "react": "16.5.2"
     },
