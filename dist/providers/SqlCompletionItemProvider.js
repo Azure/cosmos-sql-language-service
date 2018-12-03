@@ -5,7 +5,7 @@ var SqlCompletionItemProvider = /** @class */ (function () {
     function SqlCompletionItemProvider() {
         this.triggerCharacters = [" ", "."];
     }
-    SqlCompletionItemProvider.prototype.provideCompletionItems = function (model, position, token) {
+    SqlCompletionItemProvider.prototype.provideCompletionItems = function (model, position, context, token) {
         var range = {
             startLineNumber: 1,
             startColumn: 1,

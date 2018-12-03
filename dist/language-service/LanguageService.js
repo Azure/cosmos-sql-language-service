@@ -27,9 +27,9 @@ var LanguageService = /** @class */ (function () {
         this._keywordsDict = null;
         this.StatesBeforeEof = {};
         this.SyntaxErrors = [];
-        this._eofReached = false;
+        this.EofReached = false;
         this.EofReachedInPredict = false;
-        this._exThrownAfterEofReached = false;
+        this.ExThrownAfterEofReached = false;
         this.IsInPredict = false;
         this.GetExpectedTokenStrs = function () {
             var intervalSets = new IntervalSet_1.IntervalSet();
@@ -91,8 +91,8 @@ var LanguageService = /** @class */ (function () {
                 Message: msg
             };
             _this.SyntaxErrors.push(error);
-            if (_this._eofReached) {
-                _this._exThrownAfterEofReached = true;
+            if (_this.EofReached) {
+                _this.ExThrownAfterEofReached = true;
             }
         };
         this._lexerCtr = lexerCtr;
@@ -116,9 +116,9 @@ var LanguageService = /** @class */ (function () {
         this._parser.root();
     };
     LanguageService.prototype.PrepareParse = function () {
-        this._eofReached = false;
+        this.EofReached = false;
         this.EofReachedInPredict = false;
-        this._exThrownAfterEofReached = false;
+        this.ExThrownAfterEofReached = false;
         this.StatesBeforeEof = {};
         this.SyntaxErrors = [];
     };
