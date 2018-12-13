@@ -2,7 +2,7 @@ import {editor, Position, CancellationToken, languages} from "monaco-editor";
 
 declare class SqlCompletionItemProvider {
     public triggerCharacters: string[];
-    provideCompletionItems(model: editor.ITextModel, position: Position, context: languages.CompletionContext, token: CancellationToken);
+    provideCompletionItems(model: editor.ITextModel, position: Position, context: languages.CompletionContext, token: CancellationToken) : languages.ProviderResult<languages.CompletionList>;
 }
 
 declare class ErrorMarkProvider {
