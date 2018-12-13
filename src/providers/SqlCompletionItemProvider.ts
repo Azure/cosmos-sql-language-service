@@ -4,7 +4,7 @@ import {editor, Position, CancellationToken, languages} from "monaco-editor";
 export class SqlCompletionItemProvider {
     public triggerCharacters: string[] = [" ","."];
     
-    provideCompletionItems(model: editor.IReadOnlyModel, position: Position, context: languages.CompletionContext, token: CancellationToken) {      
+    provideCompletionItems(model: editor.IReadOnlyModel, position: Position, context: languages.CompletionContext, token: CancellationToken) : languages.ProviderResult<languages.CompletionList> {      
         const range = {
             startLineNumber: 1,
             startColumn: 1,
