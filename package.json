@@ -1,7 +1,7 @@
 {
     "author": "Microsoft Corporation",
     "name": "@azure/cosmos-language-service",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "Cosmos DB SQL Language Service for the Monaco editor",
     "dependencies": {
         "antlr4": "4.7.1",
