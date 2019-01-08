@@ -28,31 +28,32 @@ export class LanguageServiceFacade {
 
     private static GetParseResult = (str : string, parseReason : ParseReason) : Q.Promise<any> => {
         return Q.Promise((resolve : any) => {
-
             if (LanguageServiceFacade.workingWorker != null) {
                 LanguageServiceFacade.workingWorker.terminate();
             }
-
+            
             const currentUrlWithoutQueryParamsAndHashRoute: string = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
             let url = currentUrlWithoutQueryParamsAndHashRoute.replace(/\/[^\/]*$/, '/node_modules/@azure/cosmos-language-service/dist/worker/dist/LanguageServiceWorker.js');
             LanguageServiceFacade.workingWorker = new Worker(url);  
 
-            LanguageServiceFacade.workingWorker.onmessage = (ev : MessageEvent) => {  
-                var processedResults: any = [];
-
-                var results : any[] = ev.data;
-
+            LanguageServiceFacade.workingWorker.onmessage = (ev : MessageEvent) => {
+                var processedResults: any[] = [];  
+                var parseResults: any[] = ev.data;
+                
                 if (parseReason === ParseReason.GetCompletionWords) {
-                    results.forEach((label: string) => {
+                    parseResults.forEach((label: string) => {
                         if (!!label) {
                             processedResults.push({
                                 label: label,
+                                insertText: label,
                                 kind: languages.CompletionItemKind.Keyword
                             });
                         }
                     });
+                    let finalResult : languages.CompletionList = {suggestions : processedResults};
+                    resolve(finalResult);
                 } else if (parseReason === ParseReason.GetErrors) {
-                    results.forEach((err: any) => {
+                    parseResults.forEach((err: any) => {
                         const mark: editor.IMarkerData = {
                             severity: MarkerSeverity.Error,
                             message: err.Message,
@@ -61,13 +62,10 @@ export class LanguageServiceFacade {
                             endLineNumber: err.line,
                             endColumn: err.column
                         };
-            
-                        processedResults.push(mark)
-                    }); 
+                        processedResults.push(mark);
+                    });
+                    resolve(processedResults); 
                 }
-
-                let completionItemList : languages.CompletionList = {suggestions : processedResults};
-                resolve(completionItemList);          
             } 
 
             const source = {

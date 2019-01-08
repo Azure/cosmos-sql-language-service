@@ -35,19 +35,22 @@ var LanguageServiceFacade = /** @class */ (function () {
             LanguageServiceFacade.workingWorker = new Worker(url);
             LanguageServiceFacade.workingWorker.onmessage = function (ev) {
                 var processedResults = [];
-                var results = ev.data;
+                var parseResults = ev.data;
                 if (parseReason === ParseReason.GetCompletionWords) {
-                    results.forEach(function (label) {
+                    parseResults.forEach(function (label) {
                         if (!!label) {
                             processedResults.push({
                                 label: label,
+                                insertText: label,
                                 kind: monaco_editor_1.languages.CompletionItemKind.Keyword
                             });
                         }
                     });
+                    var finalResult = { suggestions: processedResults };
+                    resolve(finalResult);
                 }
                 else if (parseReason === ParseReason.GetErrors) {
-                    results.forEach(function (err) {
+                    parseResults.forEach(function (err) {
                         var mark = {
                             severity: monaco_editor_1.MarkerSeverity.Error,
                             message: err.Message,
@@ -58,9 +61,8 @@ var LanguageServiceFacade = /** @class */ (function () {
                         };
                         processedResults.push(mark);
                     });
+                    resolve(processedResults);
                 }
-                var completionItemList = { suggestions: processedResults };
-                resolve(completionItemList);
             };
             var source = {
                 code: str,
