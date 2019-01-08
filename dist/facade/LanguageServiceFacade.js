@@ -18,22 +18,33 @@ var LanguageServiceFacade = /** @class */ (function () {
             }, LanguageServiceFacade.timeout);
         });
         var result = LanguageServiceFacade.GetParseResult(str, parseReason);
+        var workingWorker = (parseReason === ParseReason.GetCompletionWords ? LanguageServiceFacade.workingWorkerForCompletion : LanguageServiceFacade.workingWorkerForGettingError);
         return Q.race([timeExceeded, result]).then(function (words) {
-            LanguageServiceFacade.workingWorker.terminate();
+            workingWorker.terminate();
             return words;
         });
     };
     LanguageServiceFacade.timeout = 2000;
-    LanguageServiceFacade.workingWorker = null;
+    LanguageServiceFacade.workingWorkerForCompletion = null;
+    LanguageServiceFacade.workingWorkerForGettingError = null;
     LanguageServiceFacade.GetParseResult = function (str, parseReason) {
         return Q.Promise(function (resolve) {
-            if (LanguageServiceFacade.workingWorker != null) {
-                LanguageServiceFacade.workingWorker.terminate();
+            var workingWorker = (parseReason === ParseReason.GetCompletionWords ? LanguageServiceFacade.workingWorkerForCompletion : LanguageServiceFacade.workingWorkerForGettingError);
+            // terminate the expired worker.
+            if (workingWorker != null) {
+                workingWorker.terminate();
             }
             var currentUrlWithoutQueryParamsAndHashRoute = window.location.protocol + "//" + window.location.host + window.location.pathname;
             var url = currentUrlWithoutQueryParamsAndHashRoute.replace(/\/[^\/]*$/, '/node_modules/@azure/cosmos-language-service/dist/worker/dist/LanguageServiceWorker.js');
-            LanguageServiceFacade.workingWorker = new Worker(url);
-            LanguageServiceFacade.workingWorker.onmessage = function (ev) {
+            if (parseReason === ParseReason.GetCompletionWords) {
+                LanguageServiceFacade.workingWorkerForCompletion = new Worker(url);
+                workingWorker = LanguageServiceFacade.workingWorkerForCompletion;
+            }
+            else {
+                LanguageServiceFacade.workingWorkerForGettingError = new Worker(url);
+                workingWorker = LanguageServiceFacade.workingWorkerForGettingError;
+            }
+            workingWorker.onmessage = function (ev) {
                 var processedResults = [];
                 var parseResults = ev.data;
                 if (parseReason === ParseReason.GetCompletionWords) {
@@ -68,7 +79,7 @@ var LanguageServiceFacade = /** @class */ (function () {
                 code: str,
                 reason: parseReason
             };
-            LanguageServiceFacade.workingWorker.postMessage(source);
+            workingWorker.postMessage(source);
         });
     };
     return LanguageServiceFacade;
