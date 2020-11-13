@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.LanguageServiceFacade = exports.ParseReason = void 0;
 var Q = require("q");
 var monaco_editor_1 = require("monaco-editor");
 var ParseReason;

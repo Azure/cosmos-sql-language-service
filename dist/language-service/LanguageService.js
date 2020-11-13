@@ -3,6 +3,7 @@
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 //-----------------------------------------------------------------------------
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.LanguageService = void 0;
 var antlr4 = require("antlr4");
 var InputStream_1 = require("antlr4/InputStream");
 var IntervalSet_1 = require("antlr4/IntervalSet");
