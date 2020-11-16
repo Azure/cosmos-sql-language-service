@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ErrorMarkProvider = void 0;
 var LanguageServiceFacade_1 = require("../facade/LanguageServiceFacade");
 var ErrorMarkProvider = /** @class */ (function () {
     function ErrorMarkProvider() {

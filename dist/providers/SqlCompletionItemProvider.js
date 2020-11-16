@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.SqlCompletionItemProvider = void 0;
 var LanguageServiceFacade_1 = require("../facade/LanguageServiceFacade");
 var SqlCompletionItemProvider = /** @class */ (function () {
     function SqlCompletionItemProvider() {

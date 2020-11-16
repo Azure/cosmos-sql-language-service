@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.LanguageServiceWorker = void 0;
 var LanguageService_1 = require("../language-service/LanguageService");
 var CosmosDBSqlLexer_1 = require("../cosmosdb-sql/generated/CosmosDBSqlLexer");
 var CosmosDBSqlParser_1 = require("../cosmosdb-sql/generated/CosmosDBSqlParser");
